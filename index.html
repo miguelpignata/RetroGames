@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetroGames </title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="logo">
+      <i class="fa-solid fa-gamepad"></i>
+      <h1>RetroGames</h1>
+    </div>
+    <p class="header-desc">Sua biblioteca de clássicos definitiva.</p>
+  </header>
+
+  <main class="container">
+    <div class="main-top">
+      <h2>Jogos em Destaque</h2>
+      <button id="btn-open-modal" class="btn-primary" type="button">
+        <i class="fa-solid fa-plus"></i> Cadastrar Jogo
+      </button>
+    </div>
+
+    <div id="empty-state" class="empty-state hidden">
+      <i class="fa-solid fa-ghost"></i>
+      <p>Nenhum jogo cadastrado no momento.</p>
+    </div>
+
+    <div id="games-grid" class="games-grid"></div>
+  </main>
+
+  <dialog id="game-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Cadastrar Novo Jogo</h3>
+        <button id="btn-close-x" class="btn-close" type="button">&times;</button>
+      </div>
+      
+      <form id="game-form">
+        <div class="form-group">
+          <label for="titulo">Título do Jogo</label>
+          <input type="text" id="titulo" placeholder="Ex: Chrono Trigger" required>
+        </div>
+
+        <div class="form-group">
+          <label for="plataforma">Plataforma / Console</label>
+          <input type="text" id="plataforma" placeholder="Ex: SNES, PS1" required>
+        </div>
+
+        <div class="form-group">
+          <label for="desenvolvedora">Desenvolvedora</label>
+          <input type="text" id="desenvolvedora" placeholder="Ex: Square" required>
+        </div>
+
+        <div class="form-group">
+          <label for="descricao">Breve Descrição</label>
+          <input type="text" id="descricao" placeholder="Ex: Uma jornada épica..." required>
+        </div>
+
+        <div class="form-group">
+          <label for="imagem_url">URL da Imagem de Capa</label>
+          <input type="url" id="imagem_url" placeholder="https://exemplo.com/capa.jpg" required>
+        </div>
+
+        <div class="form-group">
+          <label for="preco">Preço (R$)</label>
+          <input type="number" id="preco" step="0.01" min="0" placeholder="0.00" required>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="btn-cancel" class="btn-secondary">Cancelar</button>
+          <button type="submit" id="btn-submit" class="btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
