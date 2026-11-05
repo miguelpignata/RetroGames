@@ -1,7 +1,7 @@
-CREATE DATABASE db_retrogames;
+CREATE DATABASE IF NOT EXISTS db_retrogames;
 USE db_retrogames;
 
-CREATE TABLE jogos (
+CREATE TABLE IF NOT EXISTS jogos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(150) NOT NULL,
     plataforma VARCHAR(50) NOT NULL,

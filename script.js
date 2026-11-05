@@ -7,48 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const gamesGrid = document.getElementById('games-grid');
   const emptyState = document.getElementById('empty-state');
 
-  const initialGames = [
-    {
-      titulo: 'Super Mario World',
-      plataforma: 'SNES',
-      desenvolvedora: 'Nintendo',
-      descricao: 'A clássica aventura do encanador na Terra dos Dinossauros.',
-      imagem_url: 'Imagens/mario.jpg',
-      preco: 199.90
-    },
-    {
-      titulo: 'Sonic the Hedgehog',
-      plataforma: 'Mega Drive',
-      desenvolvedora: 'SEGA',
-      descricao: 'O ouriço mais rápido do mundo em alta velocidade contra o Dr. Eggman.',
-      imagem_url: 'Imagens/sonic.webp',
-      preco: 149.50
-    },
-    {
-      titulo: 'Castlevania: SotN',
-      plataforma: 'PlayStation 1',
-      desenvolvedora: 'Konami',
-      descricao: 'Explore o vasto castelo de Dracula com Alucard nesta obra-prima.',
-      imagem_url: 'Imagens/castlevania.webp',
-      preco: 299.00
-    },
-    {
-      titulo: 'Chrono Trigger',
-      plataforma: 'SNES',
-      desenvolvedora: 'Square',
-      descricao: 'Uma jornada épica através do tempo para salvar o futuro do planeta.',
-      imagem_url: 'Imagens/chrono.jpg',
-      preco: 349.00
-    },
-    {
-      titulo: 'Street Fighter II',
-      plataforma: 'Arcade',
-      desenvolvedora: 'Capcom',
-      descricao: 'O jogo de luta definitivo que definiu gerações nos fliperamas.',
-      imagem_url: 'Imagens/street.webp',
-      preco: 129.00
-    }
-  ];
+  const API_URL = 'http://localhost:3000/jogos';
 
   function formatCurrency(value) {
     return Number(value).toLocaleString('pt-BR', {
@@ -87,10 +46,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  initialGames.forEach(game => {
-    gamesGrid.appendChild(createGameCard(game));
-  });
-  checkEmptyState();
+  async function fetchGames() {
+    try {
+      const response = await fetch(API_URL);
+      const games = await response.json();
+      
+      gamesGrid.innerHTML = '';
+      games.forEach(game => {
+        gamesGrid.appendChild(createGameCard(game));
+      });
+      checkEmptyState();
+    } catch (error) {
+      console.error('Erro ao carregar jogos:', error);
+    }
+  }
+
+  fetchGames();
 
   btnOpenModal.addEventListener('click', () => modal.showModal());
 
@@ -102,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnCancel) btnCancel.addEventListener('click', closeModal);
   if (btnCloseX) btnCloseX.addEventListener('click', closeModal);
 
-  gameForm.addEventListener('submit', (event) => {
+  gameForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     let imgInput = document.getElementById('imagem_url').value.trim();
@@ -119,8 +90,24 @@ document.addEventListener('DOMContentLoaded', () => {
       preco: parseFloat(document.getElementById('preco').value)
     };
 
-    gamesGrid.appendChild(createGameCard(newGame));
-    checkEmptyState();
-    closeModal();
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newGame)
+      });
+
+      if (response.ok) {
+        closeModal();
+        fetchGames(); 
+      } else {
+        alert('Erro ao salvar o jogo.');
+      }
+    } catch (error) {
+      console.error('Erro na requisição:', error);
+      alert('Não foi possível conectar ao servidor.');
+    }
   });
 });
